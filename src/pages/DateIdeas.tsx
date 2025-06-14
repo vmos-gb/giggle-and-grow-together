@@ -1,4 +1,3 @@
-
 import { useState, useMemo, useEffect } from "react";
 import dateIdeas from "@/data/dateIdeas";
 import { Star } from "lucide-react";
@@ -167,7 +166,7 @@ const DateIdeas = () => {
                 className="w-full"
                 onClick={handleNextRound}
                 disabled={visibleIdeas.some(({ idx }) => ratings[idx] === undefined)}
-                variant="pink"
+                variant="default"
               >
                 Submit Ratings
               </Button>
