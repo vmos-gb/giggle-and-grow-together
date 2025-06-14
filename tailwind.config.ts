@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -11,35 +10,50 @@ export default {
   ],
   theme: {
     fontFamily: {
-      nunito: ["Nunito", "sans-serif"],
+      nunito: [
+        "Nunito",
+        "-apple-system", "BlinkMacSystemFont", "\"Segoe UI\"",
+        "Roboto", "Oxygen", "Ubuntu", "Cantarell", "\"Helvetica Neue\"", "sans-serif"
+      ],
+      sans: [
+        "-apple-system", "BlinkMacSystemFont", "\"Segoe UI\"",
+        "Roboto", "Oxygen", "Ubuntu", "Cantarell", "\"Helvetica Neue\"", "sans-serif"
+      ]
     },
     extend: {
       colors: {
-        blush: "#FFF6F2",            // Background: whiter, more contrasty
-        peach: "#FFD7CF",            // Button highlight (higher contrast)
+        // Brand blue ("his")
+        blue: {
+          DEFAULT: "#5A9BF6",
+          dark: "#3B7CD3",
+        },
+        // Brand pink ("hers")
         pink: {
-          DEFAULT: "#F65199",        // Accent: deeper, more contrasty pink
-          100: "#FED6E8",            // Light shade if needed
+          DEFAULT: "#FF6B91",
+          dark: "#E04268",
         },
-        sky: "#e2f4fd",
-        mint: {
-          DEFAULT: "#24B47E",        // Make mint more vivid and readable
-          100: "#D8FFF2",
-        },
-        lavender: "#6761A8",         // Higher contrast lavender
-        yellow: "#FFD600",           // Brighter yellow for badges/icons
+        // Neutrals and backgrounds
+        white: "#FFFFFF",
+        lightgray: "#F2F4F8",
+        dark: "#222222",
+        card: "#F2F4F8",
+        contrast: "#222222",
         primary: {
-          DEFAULT: "#D72660",        // Main brand: vivid high-contrast pink-red
+          DEFAULT: "#FF6B91",    // Use for main actions (hers/pink)
+          dark: "#E04268"
         },
-        accent: "#0099E5",           // Accent blue
-        card: "#fff",                // Cards/backgrounds
-        contrast: "#22223B",         // Universal readable text
-      },
-      boxShadow: {
-        card: "0 4px 24px 0 rgba(213,38,96,0.19)", // adjust for new pink
+        secondary: {
+          DEFAULT: "#5A9BF6",    // Use for alt/"his" buttons
+          dark: "#3B7CD3"
+        }
       },
       borderRadius: {
-        card: "2rem"
+        card: "2rem",
+        soft: "1.2rem",
+        xl: "1.5rem"
+      },
+      boxShadow: {
+        card: "0 4px 24px 0 rgba(90,155,246,0.08)", // Soft blue shadow
       },
       animation: {
         'fade-in': 'fade-in 0.3s ease',

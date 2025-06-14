@@ -5,17 +5,21 @@
 
 @layer base {
   body {
-    @apply font-nunito bg-blush text-contrast min-h-screen;
+    @apply font-sans bg-white text-dark min-h-screen;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply text-contrast;
+    @apply text-dark;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   }
-  input, textarea {
-    @apply text-contrast;
+  input, textarea, button {
+    @apply text-dark;
+    font-family: inherit;
+  }
+  .rounded-card {
+    @apply rounded-card;
   }
 }
 
-/* Custom favicon using emoji for now; real logo favicons should be generated later */
 :root {
   --favicon-emoji: "💗";
 }

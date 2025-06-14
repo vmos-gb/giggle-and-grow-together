@@ -73,31 +73,34 @@ export default function CardDeck() {
     <div className="flex flex-col items-center w-full max-w-[430px] mx-auto">
       <div className="mb-4 flex justify-center items-center gap-2">
         <button
-          className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors
-           ${deck === "question"
-             ? "bg-primary text-white shadow-card"
-             : "bg-white text-primary border border-primary"}`}
+          className={`
+            px-4 py-2 rounded-xl text-base font-semibold transition-colors border-2
+            ${deck === "question"
+              ? "bg-blue text-white border-blue shadow-card"
+              : "bg-white text-blue border-blue"}
+          `}
           onClick={() => { setDeck("question"); setShowFavs(false); }}
         >
           <span className="sr-only">Show questions</span>
-          <span className="text-lg font-bold">{/* Icon for accessibility contrast */}</span>
           Questions
         </button>
         <button
-          className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors
+          className={`
+            px-4 py-2 rounded-xl text-base font-semibold border-2 transition-colors
             ${deck === "thisOrThat"
-              ? "bg-mint text-contrast shadow-card"
-              : "bg-white text-mint border border-mint"}`}
+              ? "bg-pink text-white border-pink shadow-card"
+              : "bg-white text-pink border-pink"}
+          `}
           onClick={() => { setDeck("thisOrThat"); setShowFavs(false); }}
         >
           <span className="sr-only">Show this or that prompts</span>
           This or That
         </button>
         <button
-          className="ml-2 flex items-center px-3 py-2 text-contrast rounded-full bg-yellow/90 border-none hover:bg-yellow transition"
+          className="ml-2 flex items-center px-3 py-2 text-dark rounded-xl bg-lightgray border border-lightgray hover:bg-pink/20 transition"
           onClick={() => setShowFavs((v) => !v)}
         >
-          <Star size={18} fill="#FFD600" className="mr-1" />
+          <Star size={18} fill="#FF6B91" className="mr-1" />
           <span className="text-[.97em] font-semibold">{favs.length}</span>
         </button>
       </div>
@@ -137,14 +140,14 @@ export default function CardDeck() {
           />
           <div className="flex mt-6 justify-between select-none">
             <button
-              className="bg-white shadow px-4 py-3 rounded-full border border-pink hover:bg-pink/40 transition active:scale-95"
+              className="bg-white shadow px-4 py-3 rounded-xl border-2 border-blue hover:bg-blue/10 hover:text-blue-dark transition active:scale-95"
               aria-label="Previous"
               onClick={prev}
             >
               <ArrowLeft size={24} />
             </button>
             <button
-              className="bg-primary text-white px-6 py-3 rounded-full shadow-card font-bold text-base hover:scale-105 active:scale-95 transition"
+              className="bg-pink text-white px-6 py-3 rounded-xl shadow-card font-bold text-base border-2 border-pink hover:bg-pink-dark active:scale-95 transition"
               aria-label="Next"
               onClick={next}
             >
