@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,8 +14,10 @@
     @apply text-dark;
     font-family: inherit;
   }
+  /* Remove problematic circular apply;
+     Instead, define rounded-card with the correct border radius directly. */
   .rounded-card {
-    @apply rounded-card;
+    border-radius: 2rem;
   }
 }
 
