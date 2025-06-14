@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,4 +6,9 @@
   body {
     @apply font-nunito bg-blush text-gray-900 min-h-screen;
   }
+}
+
+/* Custom favicon using emoji for now; real logo favicons should be generated later */
+:root {
+  --favicon-emoji: "💗";
 }
