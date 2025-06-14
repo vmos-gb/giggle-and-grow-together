@@ -15,21 +15,28 @@ export default {
     },
     extend: {
       colors: {
-        blush: "#fff0ee",
-        peach: "#ffe2de",
-        pink: "#fccde2",
-        sky: "#e2f4fd",
-        mint: "#d7fbe8",
-        lavender: "#ece3fc",
-        yellow: "#fff7d1",
-        primary: {
-          DEFAULT: "#ed75a3"
+        blush: "#FFF6F2",            // Background: whiter, more contrasty
+        peach: "#FFD7CF",            // Button highlight (higher contrast)
+        pink: {
+          DEFAULT: "#F65199",        // Accent: deeper, more contrasty pink
+          100: "#FED6E8",            // Light shade if needed
         },
-        accent: "#7ee2e0",
-        card: "#fff",
+        sky: "#e2f4fd",
+        mint: {
+          DEFAULT: "#24B47E",        // Make mint more vivid and readable
+          100: "#D8FFF2",
+        },
+        lavender: "#6761A8",         // Higher contrast lavender
+        yellow: "#FFD600",           // Brighter yellow for badges/icons
+        primary: {
+          DEFAULT: "#D72660",        // Main brand: vivid high-contrast pink-red
+        },
+        accent: "#0099E5",           // Accent blue
+        card: "#fff",                // Cards/backgrounds
+        contrast: "#22223B",         // Universal readable text
       },
       boxShadow: {
-        card: "0 4px 24px 0 rgba(238,119,164,0.13)",
+        card: "0 4px 24px 0 rgba(213,38,96,0.19)", // adjust for new pink
       },
       borderRadius: {
         card: "2rem"

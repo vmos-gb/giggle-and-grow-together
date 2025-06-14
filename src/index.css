@@ -1,10 +1,17 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply font-nunito bg-blush text-gray-900 min-h-screen;
+    @apply font-nunito bg-blush text-contrast min-h-screen;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-contrast;
+  }
+  input, textarea {
+    @apply text-contrast;
   }
 }
 

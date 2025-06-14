@@ -37,12 +37,12 @@ export default function CardPrompt({
     >
       <div className="flex flex-col items-center mb-4">
         {promptIcons[type]}
-        <span className="uppercase text-xs tracking-wide text-gray-400 mb-1">
+        <span className="uppercase text-xs tracking-wide text-mint font-bold mb-1">
           {type === "question" ? "Question" : "This or That"}
         </span>
       </div>
       <div
-        className="text-center font-semibold text-xl sm:text-2xl mb-6 text-gray-800"
+        className="text-center font-semibold text-xl sm:text-2xl mb-6 text-contrast"
         style={{ wordBreak: "break-word" }}
       >
         {text}
@@ -62,7 +62,7 @@ export default function CardPrompt({
               size={28}
               strokeWidth={2.4}
               className={isFavourite ? "text-yellow fill-yellow" : "text-gray-300"}
-              fill={isFavourite ? "#fff7d1" : "none"}
+              fill={isFavourite ? "#FFD600" : "none"}
             />
           </button>
         )}

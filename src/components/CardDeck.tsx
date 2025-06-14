@@ -79,22 +79,25 @@ export default function CardDeck() {
              : "bg-white text-primary border border-primary"}`}
           onClick={() => { setDeck("question"); setShowFavs(false); }}
         >
+          <span className="sr-only">Show questions</span>
+          <span className="text-lg font-bold">{/* Icon for accessibility contrast */}</span>
           Questions
         </button>
         <button
           className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors
             ${deck === "thisOrThat"
-              ? "bg-primary text-white shadow-card"
-              : "bg-white text-primary border border-primary"}`}
+              ? "bg-mint text-contrast shadow-card"
+              : "bg-white text-mint border border-mint"}`}
           onClick={() => { setDeck("thisOrThat"); setShowFavs(false); }}
         >
+          <span className="sr-only">Show this or that prompts</span>
           This or That
         </button>
         <button
-          className="ml-2 flex items-center px-3 py-2 text-primary rounded-full bg-yellow/50 border-none hover:bg-yellow transition"
+          className="ml-2 flex items-center px-3 py-2 text-contrast rounded-full bg-yellow/90 border-none hover:bg-yellow transition"
           onClick={() => setShowFavs((v) => !v)}
         >
-          <Star size={18} fill="#fff7d1" className="mr-1" />
+          <Star size={18} fill="#FFD600" className="mr-1" />
           <span className="text-[.97em] font-semibold">{favs.length}</span>
         </button>
       </div>
