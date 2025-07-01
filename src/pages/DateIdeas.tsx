@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
 import dateIdeas from "@/data/dateIdeas";
-import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Ratings = { [index: number]: number };
@@ -11,18 +10,15 @@ const IDEAS_PER_RESULT = 15;
 const DateIdeas = () => {
   const [shownStart, setShownStart] = useState(0);
   const [ratings, setRatings] = useState<Ratings>(() => {
-    // Load from localStorage if it exists
     const val = localStorage.getItem("dateIdeaRatings");
     return val ? JSON.parse(val) : {};
   });
   const [showResults, setShowResults] = useState(false);
 
-  // Save ratings to localStorage (so both partners on same device see progress)
   useEffect(() => {
     localStorage.setItem("dateIdeaRatings", JSON.stringify(ratings));
   }, [ratings]);
 
-  // Select the next 5 unrated ideas, skipping those with ratings
   const visibleIdeas = useMemo(() => {
     let filtered: { idea: string; idx: number }[] = [];
     let i = 0;
@@ -30,24 +26,21 @@ const DateIdeas = () => {
     while (i < dateIdeas.length && ideasFound < ROUND_SIZE) {
       if (ratings[i] === undefined && i >= shownStart) {
         filtered.push({ idea: dateIdeas[i], idx: i });
-        ideasFound += 1;
+        ideasFound++;
       }
-      i += 1;
+      i++;
     }
     return filtered;
   }, [ratings, shownStart]);
 
-  // How many total rated so far
   const numRated = Object.keys(ratings).length;
 
-  // Show results after every 15 rated
   useEffect(() => {
     if (numRated > 0 && numRated % IDEAS_PER_RESULT === 0) {
       setShowResults(true);
     }
   }, [numRated]);
 
-  // Sorted list of rated ideas
   const ratedIdeasSorted = useMemo(() => {
     const ratedArr = Object.entries(ratings).map(([idx, rating]) => ({
       idx: Number(idx),
@@ -59,11 +52,12 @@ const DateIdeas = () => {
   }, [ratings]);
 
   const handleRate = (idx: number, value: number) => {
-    setRatings((prev) => ({ ...prev, [idx]: value }));
-  };
+  console.log("slider moved", idx, value);  // This line is new
+  setRatings((prev) => ({ ...prev, [idx]: value }));
+};
+
 
   const handleNextRound = () => {
-    // Advance to the next batch of unrated ideas
     let next = shownStart;
     let counted = 0;
     while (next < dateIdeas.length && counted < ROUND_SIZE) {
@@ -89,7 +83,7 @@ const DateIdeas = () => {
           Couple Date Ideas
         </h1>
         <p className="text-center text-base md:text-lg text-gray-600">
-          Rate each date idea from 1 to 5 stars. Every 15 date ideas, you'll see your top ranked dates so far!
+          Rate each date idea from 0 to 100 using the slider. Every 15 date ideas, you'll see your top ranked dates so far!
         </p>
       </div>
       {showResults ? (
@@ -99,19 +93,10 @@ const DateIdeas = () => {
             <p>No ideas rated yet.</p>
           ) : (
             <ol className="list-decimal list-inside space-y-2">
-              {ratedIdeasSorted.slice(0, 10).map(({ idx, idea, rating }, i) => (
+              {ratedIdeasSorted.slice(0, 10).map(({ idx, idea, rating }) => (
                 <li key={idx} className="flex items-center gap-3">
                   <span className="font-semibold flex-1">{idea}</span>
-                  <span className="flex gap-1 text-pink">
-                    {[1,2,3,4,5].map(s => (
-                      <Star
-                        key={s}
-                        size={18}
-                        className={s <= rating ? "text-pink fill-pink" : "text-gray-300"}
-                        fill={s <= rating ? "#FF6B91" : "none"}
-                      />
-                    ))}
-                  </span>
+                  <span className="text-pink font-semibold text-lg">Rank: {rating}</span>
                 </li>
               ))}
             </ol>
@@ -135,29 +120,17 @@ const DateIdeas = () => {
           ) : (
             <form className="space-y-6">
               {visibleIdeas.map(({ idea, idx }) => (
-                <div className="bg-card rounded-card shadow-card p-5 flex items-center gap-5" key={idx}>
+                <div key={idx} className="bg-card rounded-card shadow-card p-5 flex items-center gap-5">
                   <div className="text-lg flex-1">{idea}</div>
-                  <div className="flex gap-1">
-                    {[1,2,3,4,5].map((star) => (
-                      <button
-                        key={star}
-                        className={`p-0 bg-transparent border-none ${
-                          ratings[idx] >= star ? "text-pink" : "text-gray-300"
-                        }`}
-                        type="button"
-                        onClick={() => handleRate(idx, star)}
-                        aria-label={`${star} star${star>1 ? "s" : ""}`}
-                      >
-                        <Star
-                          size={24}
-                          strokeWidth={2.3}
-                          className={
-                            ratings[idx] >= star ? "text-pink fill-pink" : "text-gray-300"
-                          }
-                          fill={ratings[idx] >= star ? "#FF6B91" : "none"}
-                        />
-                      </button>
-                    ))}
+                  <div className="flex flex-col items-center gap-1 w-40">
+                   <input
+  type="range"
+  min={0}
+  max={100}
+  value={ratings[idx] ?? 50}
+  onChange={(e) => handleRate(idx, Number(e.target.value))}
+/>
+                    <span className="text-sm text-gray-600 select-none">Rank: {ratings[idx] ?? 50}</span>
                   </div>
                 </div>
               ))}
@@ -168,7 +141,7 @@ const DateIdeas = () => {
                 disabled={visibleIdeas.some(({ idx }) => ratings[idx] === undefined)}
                 variant="default"
               >
-                Submit Ratings
+                Submit Rankings
               </Button>
             </form>
           )}
