@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 
 type Ratings = { [index: number]: number };
 
-const ROUND_SIZE = 5;
+// Show one idea at a time now
+const ROUND_SIZE = 1;
 const IDEAS_PER_RESULT = 15;
 
 const DateIdeas = () => {
@@ -19,19 +20,11 @@ const DateIdeas = () => {
     localStorage.setItem("dateIdeaRatings", JSON.stringify(ratings));
   }, [ratings]);
 
+  // Only show 1 idea at a time: idea at index = shownStart
   const visibleIdeas = useMemo(() => {
-    let filtered: { idea: string; idx: number }[] = [];
-    let i = 0;
-    let ideasFound = 0;
-    while (i < dateIdeas.length && ideasFound < ROUND_SIZE) {
-      if (ratings[i] === undefined && i >= shownStart) {
-        filtered.push({ idea: dateIdeas[i], idx: i });
-        ideasFound++;
-      }
-      i++;
-    }
-    return filtered;
-  }, [ratings, shownStart]);
+    if (shownStart >= dateIdeas.length) return [];
+    return [{ idea: dateIdeas[shownStart], idx: shownStart }];
+  }, [shownStart]);
 
   const numRated = Object.keys(ratings).length;
 
@@ -41,6 +34,7 @@ const DateIdeas = () => {
     }
   }, [numRated]);
 
+  // Sort rated ideas descending by rating
   const ratedIdeasSorted = useMemo(() => {
     const ratedArr = Object.entries(ratings).map(([idx, rating]) => ({
       idx: Number(idx),
@@ -52,19 +46,11 @@ const DateIdeas = () => {
   }, [ratings]);
 
   const handleRate = (idx: number, value: number) => {
-  console.log("slider moved", idx, value);  // This line is new
-  setRatings((prev) => ({ ...prev, [idx]: value }));
-};
-
+    setRatings((prev) => ({ ...prev, [idx]: value }));
+  };
 
   const handleNextRound = () => {
-    let next = shownStart;
-    let counted = 0;
-    while (next < dateIdeas.length && counted < ROUND_SIZE) {
-      if (ratings[next] === undefined) counted++;
-      next++;
-    }
-    setShownStart(next);
+    setShownStart((prev) => prev + ROUND_SIZE);
     setShowResults(false);
   };
 
@@ -74,6 +60,9 @@ const DateIdeas = () => {
     setShowResults(false);
     localStorage.removeItem("dateIdeaRatings");
   };
+
+  // Check if current idea has been rated
+  const currentIdeaRated = visibleIdeas.length > 0 && ratings[visibleIdeas[0].idx] !== undefined;
 
   return (
     <div className="min-h-screen flex flex-col items-center px-2 pb-12 bg-white">
@@ -92,27 +81,28 @@ const DateIdeas = () => {
           {ratedIdeasSorted.length === 0 ? (
             <p>No ideas rated yet.</p>
           ) : (
-            <ol className="list-decimal list-inside space-y-2">
-              {ratedIdeasSorted.slice(0, 10).map(({ idx, idea, rating }) => (
-                <li key={idx} className="flex items-center gap-3">
-                  <span className="font-semibold flex-1">{idea}</span>
-                  <span className="text-pink font-semibold text-lg">Rank: {rating}</span>
-                </li>
-              ))}
-            </ol>
+            <>
+              <p className="mb-4 text-center text-lg italic text-pink">
+                Oh, it appears your top 3 ideas were:
+              </p>
+              <ol className="list-decimal list-inside space-y-2 text-lg font-semibold">
+                {ratedIdeasSorted.slice(0, 3).map(({ idea }, rank) => (
+                  <li key={rank} className="text-primary">
+                    {rank + 1}. {idea}
+                  </li>
+                ))}
+              </ol>
+            </>
           )}
-          <Button variant="blue" className="mt-6 w-full" onClick={handleNextRound}>
-            Continue Ranking More Ideas
-          </Button>
-          <Button variant="ghost" className="mt-2 w-full" onClick={handleReset}>
-            Reset All Rankings
+          <Button variant="blue" className="mt-6 w-full" onClick={handleReset}>
+            Reset & Start Over
           </Button>
         </div>
       ) : (
         <div className="w-full max-w-xl space-y-4 animate-fade-in mt-6">
           {visibleIdeas.length === 0 ? (
             <div className="bg-card rounded-card p-8 text-center shadow-card">
-              <p className="mb-5 font-semibold text-lg">You’ve rated all 100 ideas!</p>
+              <p className="mb-5 font-semibold text-lg">You’ve rated all {dateIdeas.length} ideas!</p>
               <Button variant="ghost" onClick={handleReset}>
                 Start Over
               </Button>
@@ -120,16 +110,17 @@ const DateIdeas = () => {
           ) : (
             <form className="space-y-6">
               {visibleIdeas.map(({ idea, idx }) => (
-                <div key={idx} className="bg-card rounded-card shadow-card p-5 flex items-center gap-5">
-                  <div className="text-lg flex-1">{idea}</div>
-                  <div className="flex flex-col items-center gap-1 w-40">
-                   <input
-  type="range"
-  min={0}
-  max={100}
-  value={ratings[idx] ?? 50}
-  onChange={(e) => handleRate(idx, Number(e.target.value))}
-/>
+                <div key={idx} className="bg-card rounded-card shadow-card p-5 flex flex-col gap-4">
+                  <div className="text-xl font-semibold text-center">{idea}</div>
+                  <div className="flex flex-col items-center gap-1 w-full max-w-xs mx-auto">
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      value={ratings[idx] ?? 50}
+                      onChange={(e) => handleRate(idx, Number(e.target.value))}
+                      className="w-full"
+                    />
                     <span className="text-sm text-gray-600 select-none">Rank: {ratings[idx] ?? 50}</span>
                   </div>
                 </div>
@@ -138,10 +129,10 @@ const DateIdeas = () => {
                 type="button"
                 className="w-full"
                 onClick={handleNextRound}
-                disabled={visibleIdeas.some(({ idx }) => ratings[idx] === undefined)}
+                disabled={!currentIdeaRated}
                 variant="default"
               >
-                Submit Rankings
+                Submit Ranking
               </Button>
             </form>
           )}
